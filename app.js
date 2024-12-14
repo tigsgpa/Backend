@@ -1,6 +1,4 @@
 const express = require('express');
-require("dotenv").config();
-
 const app = new express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -92,18 +90,8 @@ app.get('/api/restaurants-by-tag', async (req, res) => {
     const lowerCaseTag = tag ? tag.toLowerCase() : '';
 
     const restaurants = await Restaurant.find({
-      menu: {
-        $elemMatch: {
-          items: {
-            $elemMatch: {
-              $or: [
-                { tags: { $elemMatch: { $regex: lowerCaseTag, $options: 'i' } } },
-                { name: { $regex: lowerCaseTag, $options: 'i' } }
-              ]
-            }
-          }
-        }
-      }
+      cuisine : { $elemMatch : { $regex: lowerCaseTag, $options: 'i' } }
+      
     });
 
     console.log(`Found ${restaurants.length} restaurants with tag: ${tag}`);
